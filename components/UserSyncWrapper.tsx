@@ -15,7 +15,25 @@ const UserSyncWrapper = ({ children }: { children: React.ReactNode }) => {
     if (!user?.id) return;
     try {
       setIsLoading(true);
+      setError(null);
+      await createOrUpdateUser({
+        userId: user.id,
+        name:
+          user.fullName ||
+          user.firstName ||
+          user.emailAddresses[0].emailAddress ||
+          "Unknown User",
+        email: user.emailAddresses[0]?.emailAddress || "",
+        imageUrl: user.imageUrl || "",
+      });
     } catch (error) {
+      console.error("Failed to sync user:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to sync user"
+      );
+    } finally {
       setIsLoading(false);
     }
   }, [createOrUpdateUser, user]);
