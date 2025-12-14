@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { SignedOut, SignInButton } from "@clerk/nextjs";
+import { SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import FeatureCard from "@/components/FeatureCard";
 import { MessageCircle, Video, Zap, Users, Shield } from "lucide-react";
 
@@ -85,7 +85,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
               <FeatureCard
                 icon={MessageCircle}
                 title="Instant Messaging"
@@ -113,6 +113,42 @@ export default function Home() {
               />
             </div>
           </div>
+
+          {/* Enhanced CTA section */}
+          <div className="w-full max-w-4xl">
+            <div className="rounded-2xl border bg-linear-to-br from-primary/5 to-primary/10 p-12 text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+                Ready to transform your conversations?
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Join thousands of users who&apos;ve already discovered a better way to communicate. Start your journey with Beam today - it&apos;s completely free.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <SignedOut>
+                  <SignUpButton mode="modal">
+                    <Button size="lg" className="text-lg px-8 py-6 h-auto">
+                      Get Started Free
+                    </Button>
+                  </SignUpButton>
+                </SignedOut>
+              </div>
+              <div className="flex justify-center flex-col sm:flex-row items-center gap-6 mt-8 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  No credit card required
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  Free forever plan
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  Setup in 30 seconds
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </main>
     </div>
