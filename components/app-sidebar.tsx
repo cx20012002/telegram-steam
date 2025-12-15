@@ -1,5 +1,6 @@
+"use client";
+
 import * as React from "react";
-import { GalleryVerticalEnd } from "lucide-react";
 
 import {
   Sidebar,
@@ -11,23 +12,39 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { ChannelList, divMod } from "stream-chat-react";
+import { ChannelFilters } from "stream-chat";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser();
+  const filters: ChannelFilters = {
+    members: {
+      $in: [user?.id as string],
+    },
+    type: { $in: ["messaging", "team"] },
+  };
+
+  const options = { presence: true, state: true };
+  const sort = [{ last_message_at: -1 }];
+
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <GalleryVerticalEnd className="size-4" />
+              <div className="flex items-center justify-between w-full">
+                <div className="flex flex-col">
+                  <span className="text-xs text-muted-foreground">
+                    Welcome Back
+                  </span>
+                  <span className="text-sm font-semibold">
+                    {user?.firstName} {user?.lastName}
+                  </span>
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Documentation</span>
-                  <span className="">v1.0.0</span>
-                </div>
-              </a>
+                <UserButton signInUrl="/sign-in" />
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -38,6 +55,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <Button className="w-full" variant={"outline"}>
               Start New Chat
             </Button>
+
+            <ChannelList
+              sort={sort}
+              filters={filters}
+              options={options}
+              EmptyStateIndicator={() => (
+                <div className="flex flex-col items-center justify-center h-full py-12 px-4">
+                  <div className="text-6xl mb-6 opacity-20"></div>
+                  <h2 className="text-xl font-medium text-foreground mb-2"></h2>
+                </div>
+              )}
+            />
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
