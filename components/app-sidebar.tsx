@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { ChannelList, divMod } from "stream-chat-react";
+import { ChannelList } from "stream-chat-react";
 import { ChannelFilters } from "stream-chat";
+import NewChatDialog from "./NewChatDialog";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser();
@@ -52,18 +53,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu className="gap-2">
-            <Button className="w-full" variant={"outline"}>
-              Start New Chat
-            </Button>
-
+            <NewChatDialog>
+              <Button className="w-full" variant={"outline"}>
+                Start New Chat
+              </Button>
+            </NewChatDialog>
             <ChannelList
               sort={sort}
               filters={filters}
               options={options}
               EmptyStateIndicator={() => (
                 <div className="flex flex-col items-center justify-center h-full py-12 px-4">
-                  <div className="text-6xl mb-6 opacity-20"></div>
-                  <h2 className="text-xl font-medium text-foreground mb-2"></h2>
+                  <div className="text-6xl mb-6 opacity-20">💬</div>
+                  <h2 className="text-xl font-medium text-foreground mb-2">
+                    Ready to chat?
+                  </h2>
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed max-w-[200px]">
+                    Your conversations will appear here. once you start chatting
+                    with others.
+                  </p>
                 </div>
               )}
             />

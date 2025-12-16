@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"npx convex dev\"",
+    "dev": "next dev & npx convex dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
