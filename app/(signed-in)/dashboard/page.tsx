@@ -1,7 +1,6 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import {
   Channel,
   ChannelHeader,
@@ -14,20 +13,39 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { LogOutIcon, VideoIcon } from "lucide-react";
-
-const handleCall = () => {
-  console.log("Calling...");
-};
-
-const handleLeaveChat = () => {
-  console.log("Leaving chat...");
-};
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const { user } = useUser();
-  const router = useRouter();
   const { channel, setActiveChannel } = useChatContext();
   const { setOpen } = useSidebar();
+  const router = useRouter();
+
+  const handleCall = () => {
+    if (!channel) return;
+    router.push(`/dashboard/video-call/${channel.id}`);
+    setOpen(false);
+  };
+
+  const handleLeaveChat = async () => {
+    if (!channel || !user?.id) {
+      console.log("No active channel or user");
+      return;
+    }
+
+    const confirm = window.confirm("Are you sure you want to leave this chat?");
+    if (!confirm) {
+      return;
+    }
+
+    try {
+      await channel.removeMembers([user.id]);
+      setActiveChannel(undefined);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error leaving chat:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col w-full flex-1">
@@ -56,12 +74,12 @@ const Dashboard = () => {
                   Leave Chat
                 </Button>
               </div>
+            </div>
 
-              <MessageList />
+            <MessageList />
 
-              <div className="sticky bottom-0 w-full">
-                <MessageInput />
-              </div>
+            <div className="sticky bottom-0 w-full">
+              <MessageInput />
             </div>
           </Window>
           <Thread />
