@@ -14,6 +14,7 @@ export const useCreateNewChat = () => {
   }: CreateNewChatProps) => {
     const isGroupChat = members.length > 2;
 
+
     if (isGroupChat) {
       const existingChannel = await streamClient.queryChannels(
         {
